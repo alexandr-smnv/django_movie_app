@@ -32,6 +32,10 @@ class AddReview(View):
         if form.is_valid():
             # приостановление сохранения формы
             form = form.save(commit=False)
+            # ищем в пост запросе ключ 'parent'
+            if request.POST.get('parent', None):
+                #
+                form.parent_id = int(request.POST.get('parent'))
             # внесение изменений в форму (связываем комментарий с фильмом)
             form.movie = movie
             # сохранение формы
