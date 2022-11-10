@@ -63,53 +63,55 @@
           <li style="list-style: none">
             <span><b>Сборы в мире:</b> ${{ movie.fess_in_world }}</span>
           </li>
-          <li style="list-style: none">
-            <a href="#"><b>Рейтинг:</b>
-              <span class="fa fa-star" aria-hidden="true"
-                    style="outline: none; cursor: inherit;"></span>
-              <span class="fa fa-star" aria-hidden="true"
-                    style="outline: none; cursor: inherit;"></span>
-              <span class="fa fa-star" aria-hidden="true"
-                    style="outline: none; cursor: inherit;"></span>
-              <span class="fa fa-star" aria-hidden="true"
-                    style="outline: none; cursor: inherit;"></span>
-              <span class="fa fa-star" aria-hidden="true"
-                    style="outline: none; cursor: inherit;"></span>
-              <span class="editContent"
-                    style="outline: none; cursor: inherit;">5.0</span>
-            </a>
+
+          <li>
+            <form action="{% url 'add_rating' %}" method="post" name="rating">
+              <b>Рейтинг:</b>
+              {% csrf_token %}
+              <input type="hidden" value="{{ movie.id }}" name="movie">
+              <span class="rating">
+                                {% for k, v in star_form.fields.star.choices %}
+                                  <input id="rating{{ v }}" type="radio" name="star"
+                                         value="{{ k }}">
+                                  <label for="rating{{ v }}">{{ k }}</label>
+                                {% endfor %}
+                            </span>
+              <span class="editContent">4.0</span>
+            </form>
           </li>
-          <div class="share-desc">
-            <div class="share">
-              <h4 class="editContent"
-                  style="outline: none; cursor: inherit;">
-                Share:</h4>
-              <ul class="w3layouts_social_list list-unstyled">
-                <li>
-                  <a href="#" class="w3pvt_facebook editContent"
-                     style="outline: none; cursor: inherit;">
+        </ul>
+
+        <div class="share-desc">
+          <div class="share">
+            <h4 class="editContent"
+                style="outline: none; cursor: inherit;">
+              Share:</h4>
+            <ul class="w3layouts_social_list list-unstyled">
+              <li>
+                <a href="#" class="w3pvt_facebook editContent"
+                   style="outline: none; cursor: inherit;">
                                                 <span class="fa fa-facebook-f"
                                                       style="outline: none; cursor: inherit;"></span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="w3pvt_twitter editContent"
-                     style="outline: none; cursor: inherit;">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="w3pvt_twitter editContent"
+                   style="outline: none; cursor: inherit;">
                                                 <span class="fa fa-twitter"
                                                       style="outline: none; cursor: inherit;"></span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="w3pvt_dribble editContent"
-                     style="outline: none; cursor: inherit;">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="w3pvt_dribble editContent"
+                   style="outline: none; cursor: inherit;">
                                                 <span class="fa fa-dribbble"
                                                       style="outline: none; cursor: inherit;"></span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div class="clearfix"></div>
+                </a>
+              </li>
+            </ul>
           </div>
+          <div class="clearfix"></div>
+        </div>
       </div>
     </div>
     <div class="row sub-para-w3layouts mt-5">
@@ -185,15 +187,15 @@
 
           {# Обращаемся к объекту отзыва получаем все отзывы, которые завязаны на нашем отзыве #}
           {% for rew in review.reviews_set.all %}
-          <div class="media mt-5 editContent">
-            <a class="pr-3" href="#">
-              <img src="{% static 'images/te2.jpg' %}" class="img-fluid " alt="image">
-            </a>
-            <div class="media-body">
-              <h5 class="mt-0 editContent">{{ rew.name }}</h5>
-              <p class="mt-2 editContent">{{ rew.text }}</p>
+            <div class="media mt-5 editContent">
+              <a class="pr-3" href="#">
+                <img src="{% static 'images/te2.jpg' %}" class="img-fluid " alt="image">
+              </a>
+              <div class="media-body">
+                <h5 class="mt-0 editContent">{{ rew.name }}</h5>
+                <p class="mt-2 editContent">{{ rew.text }}</p>
+              </div>
             </div>
-          </div>
           {% endfor %}
 
         </div>
@@ -202,11 +204,12 @@
   </div>
   </div>
   <script>
-  {# передача id и name отзыва на который зотим ответить #}
-    function addReview(name, id) {
-        {# передача значения parent_id в скрытое поле 'parent' #}
-        document.getElementById('contactparent').value = id;
-        document.getElementById('contactcomment').innerText = `${name}, `
-    }
+      {# передача id и name отзыва на который зотим ответить #}
+
+      function addReview(name, id) {
+          {# передача значения parent_id в скрытое поле 'parent' #}
+          document.getElementById('contactparent').value = id;
+          document.getElementById('contactcomment').innerText = `${name}, `
+      }
   </script>
 {% endblock movie %}
