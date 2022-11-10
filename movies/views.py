@@ -5,13 +5,20 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 
 from movies.forms import ReviewForm
-from movies.models import Movie
+from movies.models import Movie, Category
 
 
 class MoviesView(ListView):
     """Список фильмов"""
     model = Movie
     queryset = Movie.objects.all().filter(draft=False)
+
+    # def get_context_data(self, *args, **kwargs):
+    #     # получаем словарь контекста
+    #     context = super().get_context_data(*args, **kwargs)
+    #     # добавляем в контекст новое поле
+    #     context['categories'] = Category.objects.all()
+    #     return context
 
 
 class MovieDetail(DetailView):
