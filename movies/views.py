@@ -24,13 +24,7 @@ class MoviesView(GenreYear, ListView):
     """Список фильмов"""
     model = Movie
     queryset = Movie.objects.all().filter(draft=False)
-
-    # def get_context_data(self, *args, **kwargs):
-    #     # получаем словарь контекста
-    #     context = super().get_context_data(*args, **kwargs)
-    #     # добавляем в контекст новое поле
-    #     context['categories'] = Category.objects.all()
-    #     return context
+    paginate_by = 3
 
 
 class MovieDetail(GenreYear, DetailView):
@@ -78,6 +72,8 @@ class ActorView(GenreYear, DetailView):
 
 class FilterMoviesView(GenreYear, ListView):
     """Фильтр фильмов"""
+    paginate_by = 2
+
     def get_queryset(self):
         # фильмы будут фильтроваться по значению годов, которые будут
         # входить в список возвращаемый из фронта
@@ -87,8 +83,14 @@ class FilterMoviesView(GenreYear, ListView):
             # или жанры или все вместе
             Q(year__in=self.request.GET.getlist('year')) |
             Q(genres__in=self.request.GET.getlist('genre'))
-        )
+        ).distinct()
         return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['year'] = ''.join([f'year={x}&' for x in self.request.GET.getlist('year')])
+        context['genre'] = ''.join([f'genre={x}&' for x in self.request.GET.getlist('genre')])
+        return context
 
 
 class AddStarRating(View):
