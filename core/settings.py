@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # 'snowpenguin.django.recaptcha3',
+    'captcha',
     'ckeditor',
     'ckeditor_uploader',
     'movies'
@@ -186,3 +189,7 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
+
+RECAPTCHA_PUBLIC_KEY = '6Lf0EwAjAAAAAL8KcGdBY6Vf0VaVvSbElaNbeuU9'
+RECAPTCHA_PRIVATE_KEY = '6Lf0EwAjAAAAAMmuDtLfS0Ev-Z75G5voysaaP7g3'
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']

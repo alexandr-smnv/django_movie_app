@@ -37,6 +37,7 @@ class MovieDetail(GenreYear, DetailView):
         context = super().get_context_data(**kwargs)
         # добавляем ключ star_form и значение заносим в форму
         context['star_form'] = RatingForm()
+        context['form'] = ReviewForm()
         return context
 
 

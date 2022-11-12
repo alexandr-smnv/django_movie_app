@@ -1,3 +1,5 @@
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV3
 from django import forms
 
 from .models import Reviews, RatingStar, Rating
@@ -5,11 +7,18 @@ from .models import Reviews, RatingStar, Rating
 
 class ReviewForm(forms.ModelForm):
     """Форма отзыва"""
+    captcha = ReCaptchaField(widget=ReCaptchaV3())
+
     class Meta:
         # модель
         model = Reviews
         # поля из модели для заполнения
-        fields = ['name', 'email', 'text']
+        fields = ['name', 'email', 'text', 'captcha']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control border'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control border'}),
+            'text': forms.Textarea(attrs={'class': 'form-control border'}),
+        }
 
 
 class RatingForm(forms.ModelForm):
